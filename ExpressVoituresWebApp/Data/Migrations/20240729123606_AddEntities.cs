@@ -62,8 +62,7 @@ namespace ExpressVoituresWebApp.Data.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    Vin = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Vin = table.Column<int>(type: "int", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     PurchasePrice = table.Column<float>(type: "real", nullable: false),
                     PurchaseDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
