@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoituresWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240715145800_AddEntities")]
+    [Migration("20240729123606_AddEntities")]
     partial class AddEntities
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace ExpressVoituresWebApp.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -28,10 +28,7 @@ namespace ExpressVoituresWebApp.Data.Migrations
             modelBuilder.Entity("ExpressVoituresWebApp.Data.Car", b =>
                 {
                     b.Property<int>("Vin")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Vin"));
 
                     b.Property<string>("ListingDate")
                         .HasColumnType("nvarchar(max)");
