@@ -7,7 +7,7 @@ namespace ExpressVoituresWebApp.Data
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public required int Vin { get; set; }
+        public required long Vin { get; set; }
         [ForeignKey("CarModels")]
         public required int ModelId { get; set; }
         public required float PurchasePrice { get; set; }

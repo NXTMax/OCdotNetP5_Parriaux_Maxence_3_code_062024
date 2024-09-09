@@ -7,7 +7,7 @@ namespace ExpressVoituresWebApp.Data
     public class CarRepair
     {
         [ForeignKey("Cars")]
-        public required int CarVin { get; set; }
+        public required long CarVin { get; set; }
         [ForeignKey("Repairs")]
         public required int RepairId { get; set; }
 
