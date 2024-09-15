@@ -11,10 +11,10 @@ namespace ExpressVoituresWebApp.Data
         [ForeignKey("CarModels")]
         public required int ModelId { get; set; }
         public required float PurchasePrice { get; set; }
-        public required string PurchaseDate { get; set; }
-        public string? ListingDate { get; set; }
+        public required DateOnly PurchaseDate { get; set; }
+        public DateOnly? ListingDate { get; set; }
         public float? ResellPrice { get; set; }
-        public string? ResellDate { get; set; }
+        public DateOnly? ResellDate { get; set; }
 
         public virtual CarModel? Model { get; set; }
     }
