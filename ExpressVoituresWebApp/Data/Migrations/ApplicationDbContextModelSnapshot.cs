@@ -17,31 +17,30 @@ namespace ExpressVoituresWebApp.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("ExpressVoituresWebApp.Data.Car", b =>
                 {
-                    b.Property<int>("Vin")
-                        .HasColumnType("int");
+                    b.Property<long>("Vin")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("ListingDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly?>("ListingDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PurchaseDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly>("PurchaseDate")
+                        .HasColumnType("date");
 
                     b.Property<float>("PurchasePrice")
                         .HasColumnType("real");
 
-                    b.Property<string>("ResellDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly?>("ResellDate")
+                        .HasColumnType("date");
 
                     b.Property<float?>("ResellPrice")
                         .HasColumnType("real");
@@ -83,8 +82,8 @@ namespace ExpressVoituresWebApp.Data.Migrations
 
             modelBuilder.Entity("ExpressVoituresWebApp.Data.CarRepair", b =>
                 {
-                    b.Property<int>("CarVin")
-                        .HasColumnType("int");
+                    b.Property<long>("CarVin")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("RepairId")
                         .HasColumnType("int");

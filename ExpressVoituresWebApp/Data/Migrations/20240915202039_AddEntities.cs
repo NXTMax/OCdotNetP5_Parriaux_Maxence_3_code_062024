@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -62,13 +63,13 @@ namespace ExpressVoituresWebApp.Data.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    Vin = table.Column<int>(type: "int", nullable: false),
+                    Vin = table.Column<long>(type: "bigint", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     PurchasePrice = table.Column<float>(type: "real", nullable: false),
-                    PurchaseDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ListingDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PurchaseDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ListingDate = table.Column<DateOnly>(type: "date", nullable: true),
                     ResellPrice = table.Column<float>(type: "real", nullable: true),
-                    ResellDate = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ResellDate = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +86,7 @@ namespace ExpressVoituresWebApp.Data.Migrations
                 name: "CarRepairs",
                 columns: table => new
                 {
-                    CarVin = table.Column<int>(type: "int", nullable: false),
+                    CarVin = table.Column<long>(type: "bigint", nullable: false),
                     RepairId = table.Column<int>(type: "int", nullable: false),
                     Cost = table.Column<float>(type: "real", nullable: false)
                 },

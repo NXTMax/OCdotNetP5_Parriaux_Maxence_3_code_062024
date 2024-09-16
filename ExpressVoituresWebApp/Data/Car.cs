@@ -7,12 +7,15 @@ namespace ExpressVoituresWebApp.Data
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Vin { get; set; }
-        public required virtual CarModel Model { get; set; }
-        public float PurchasePrice { get; set; }
-        public required string PurchaseDate { get; set; }
-        public string? ListingDate { get; set; }
+        public required long Vin { get; set; }
+        [ForeignKey("CarModels")]
+        public required int ModelId { get; set; }
+        public required float PurchasePrice { get; set; }
+        public required DateOnly PurchaseDate { get; set; }
+        public DateOnly? ListingDate { get; set; }
         public float? ResellPrice { get; set; }
-        public string? ResellDate { get; set; }
+        public DateOnly? ResellDate { get; set; }
+
+        public virtual CarModel? Model { get; set; }
     }
 }
