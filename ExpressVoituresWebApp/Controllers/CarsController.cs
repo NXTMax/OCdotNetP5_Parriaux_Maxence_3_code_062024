@@ -21,7 +21,7 @@ namespace ExpressVoituresWebApp.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Cars.Include(c => c.Model);
+            var applicationDbContext = _context.Cars.Include(c => c.Model.Manufacturer);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace ExpressVoituresWebApp.Controllers
             }
 
             var car = await _context.Cars
-                .Include(c => c.Model)
+                .Include(c => c.Model.Manufacturer)
                 .FirstOrDefaultAsync(m => m.Vin == id);
             if (car == null)
             {
@@ -47,7 +47,10 @@ namespace ExpressVoituresWebApp.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["ModelId"] = new SelectList(_context.CarModels, "Id", "Id");
+            ViewData["ModelId"] = new SelectList(
+                _context.CarModels.Include(cm => cm.Manufacturer),
+                "Id",
+                null);
             return View();
         }
 
@@ -64,7 +67,11 @@ namespace ExpressVoituresWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ModelId"] = new SelectList(_context.CarModels, "Id", "Id", car.ModelId);
+            ViewData["ModelId"] = new SelectList(
+                _context.CarModels.Include(cm => cm.Manufacturer),
+                "Id",
+                null,
+                car.ModelId);
             return View(car);
         }
 
@@ -81,7 +88,11 @@ namespace ExpressVoituresWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ModelId"] = new SelectList(_context.CarModels, "Id", "Id", car.ModelId);
+            ViewData["ModelId"] = new SelectList(
+                _context.CarModels.Include(cm => cm.Manufacturer),
+                "Id",
+                null,
+                car.ModelId);
             return View(car);
         }
 
@@ -117,7 +128,11 @@ namespace ExpressVoituresWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ModelId"] = new SelectList(_context.CarModels, "Id", "Id", car.ModelId);
+            ViewData["ModelId"] = new SelectList(
+                _context.CarModels.Include(cm => cm.Manufacturer),
+                "Id",
+                null,
+                car.ModelId);
             return View(car);
         }
 
@@ -130,7 +145,7 @@ namespace ExpressVoituresWebApp.Controllers
             }
 
             var car = await _context.Cars
-                .Include(c => c.Model)
+                .Include(c => c.Model.Manufacturer)
                 .FirstOrDefaultAsync(m => m.Vin == id);
             if (car == null)
             {
