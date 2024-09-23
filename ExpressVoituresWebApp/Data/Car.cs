@@ -15,6 +15,8 @@ namespace ExpressVoituresWebApp.Data
         public DateOnly? ListingDate { get; set; }
         public float? ResellPrice { get; set; }
         public DateOnly? ResellDate { get; set; }
+        public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
 
         public virtual CarModel? Model { get; set; }
     }

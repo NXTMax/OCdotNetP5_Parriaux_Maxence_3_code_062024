@@ -12,10 +12,12 @@ namespace ExpressVoituresWebApp.Controllers
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CarsController(ApplicationDbContext context)
+        public CarsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Cars
@@ -59,10 +61,23 @@ namespace ExpressVoituresWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate")] Car car)
+        public async Task<IActionResult> Create([Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
+            IFormFile? ImageFile)
         {
             if (ModelState.IsValid)
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageFile.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+                    car.ImageUrl = "/images/" + uniqueFileName;
+                }
+
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -101,7 +116,8 @@ namespace ExpressVoituresWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate")] Car car)
+        public async Task<IActionResult> Edit(long id, [Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
+            IFormFile? ImageFile)
         {
             if (id != car.Vin)
             {
@@ -112,6 +128,18 @@ namespace ExpressVoituresWebApp.Controllers
             {
                 try
                 {
+                    if (ImageFile != null && ImageFile.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageFile.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await ImageFile.CopyToAsync(fileStream);
+                        }
+                        car.ImageUrl = "/images/" + uniqueFileName;
+                    }
+
                     _context.Update(car);
                     await _context.SaveChangesAsync();
                 }
