@@ -1,65 +1,36 @@
 ﻿@model IEnumerable<ExpressVoituresWebApp.Data.Car>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Nos voitures";
+	var currentDate = DateOnly.FromDateTime(DateTime.Now);
+	bool adminView = User.Identity?.Name == "jaques.dupont@expressvoitures.fr";
+	IEnumerable<ExpressVoituresWebApp.Data.Car> listedCars = Model.Where(c => c.ListingDate < currentDate);
 }
 
-<h1>Index</h1>
+<h1>Nos voitures</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PurchasePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PurchaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListingDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResellPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ResellDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurchasePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurchaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ListingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResellPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResellDate)
-            </td>
-            <td>
-                @item.Model
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Vin">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Vin">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Vin">Delete</a>
-            </td>
-        </tr>
+@if (adminView)
+{
+	<p class="text-center">
+		<a id="addCarBtn" class="btn" asp-action="Create">+Ajouter une voiture</a>
+	</p>
 }
-    </tbody>
-</table>
+
+<section id="carList">
+	@foreach (var item in adminView ? Model : listedCars)
+	{
+		<a asp-action="Details" asp-route-id="@item.Vin">
+			<article>
+				<img src="@item.ImageUrl" alt="@item.Model" />
+				<div class="carInfo">
+					<h3>@(item.ResellPrice.HasValue ? @item.ResellPrice + " €" : "" )</h3>
+					<p>@item.Model?.Year</p>
+					<p>@item.Model?.Manufacturer</p>
+					<p>@item.Model?.Name</p>
+					<p>@item.Model?.Finition</p>
+				</div>
+			</article>
+		</a>
+	}
+</section>
+
