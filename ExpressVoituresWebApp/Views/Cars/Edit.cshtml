@@ -47,19 +47,19 @@
 				<span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label">Upload Image</label>
+                <label asp-for="ImageUrl" class="control-label">Changer l'image</label>
                 <input type="file" name="ImageFile" class="form-control" />
                 <input type="hidden" asp-for="ImageUrl" />
             </div>
             <div class="form-group text-center">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste</a>
 </div>
 
 @section Scripts {
