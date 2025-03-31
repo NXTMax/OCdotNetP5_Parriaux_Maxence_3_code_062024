@@ -80,7 +80,7 @@ namespace ExpressVoituresWebApp.Controllers
 
                 _context.Add(car);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View("CreateSuccess");
             }
             ViewData["ModelId"] = new SelectList(
                 _context.CarModels.Include(cm => cm.Manufacturer),
@@ -188,14 +188,16 @@ namespace ExpressVoituresWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _context.Cars
+                .Include(c => c.Model.Manufacturer)
+                .FirstOrDefaultAsync(m => m.Vin == id);
             if (car != null)
             {
                 _context.Cars.Remove(car);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View("DeleteSuccess", car);
         }
 
         private bool CarExists(long id)

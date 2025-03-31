@@ -1,0 +1,14 @@
+﻿@model ExpressVoituresWebApp.Data.Car
+
+@{
+    ViewData["Title"] = "DeleteSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="view-centered">
+    <div class="text-center">
+        <h1>@Model.Model</h1>
+        <p>a bien été supprimée</p>
+        <a class="btn" asp-action="Index">Retour à l'acceuil</a>
+    </div>
+</div>
