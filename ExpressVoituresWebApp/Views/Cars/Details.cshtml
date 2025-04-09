@@ -1,66 +1,88 @@
 ﻿@model ExpressVoituresWebApp.Data.Car
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
+	bool adminView = User.Identity?.Name == "jaques.dupont@expressvoitures.fr";
 }
 
-<h1>Details</h1>
-
+<h1>Détails</h1>
 <div>
-    <h4>Car</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PurchasePrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PurchasePrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PurchaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PurchaseDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ListingDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ListingDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResellPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResellPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResellDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResellDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.Model
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            Image
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.ImageUrl" alt="Car Image" style="max-width: 100%; height: auto;" />
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Vin">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<h4>Car</h4>
+	<hr />
+	<a asp-action="Index" id="backToList">← Retour</a>
+	<article>
+			<img src="@Model.ImageUrl" alt="@Model.Model" />
+		<div>
+			@if (adminView)
+			{
+				<div class="adminInfo">
+					<p>Vous avez publié cette annonce, vous pouvez la :</p>
+					<div>
+						<a asp-action="Edit" asp-route-id="@Model?.Vin">modifier</a>
+						<a asp-action="Delete" asp-route-id="@Model?.Vin">supprimer</a>
+					</div>
+				</div>
+			}
+			<div class="carInfo">
+				<h3>@(Model.ResellPrice.HasValue ? @Model.ResellPrice + " €" : "")</h3>
+				<p>@Model.Model?.Year</p>
+				<p>@Model.Model?.Manufacturer</p>
+				<p>@Model.Model?.Name</p>
+				<p>@Model.Model?.Finition</p>
+			</div>
+		</div>
+	</article>
+	@* <dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.PurchasePrice)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.PurchasePrice)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.PurchaseDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.PurchaseDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ListingDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ListingDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ResellPrice)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ResellPrice)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ResellDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ResellDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Model)
+		</dt>
+		<dd class="col-sm-10">
+			@Model.Model
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Description)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Description)
+		</dd>
+		@if (Model.ImageUrl != null)
+		{
+			<dt class="col-sm-2">
+				Image
+			</dt>
+			<dd class="col-sm-10">
+				<img src="@Model.ImageUrl" alt="Car Image" style="max-width: 100%; height: auto;" />
+			</dd>
+		}
+	</dl> *@
 </div>
