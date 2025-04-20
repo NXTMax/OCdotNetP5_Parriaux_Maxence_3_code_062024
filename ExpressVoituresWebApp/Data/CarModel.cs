@@ -8,10 +8,10 @@ namespace ExpressVoituresWebApp.Data
         [ForeignKey("Manufacturer")]
         public required int ManufacturerId { get; set; }
         public required string Name { get; set; }
-        public string? Finition { get; set; }
         public int? Year { get; set; }
 
         public virtual Manufacturer? Manufacturer { get; set; }
+        public virtual ModelFinition? Finition { get; set; }
 
         override public string ToString()
         {
