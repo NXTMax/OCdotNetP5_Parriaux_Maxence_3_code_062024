@@ -15,10 +15,37 @@
                 <input asp-for="Vin" class="form-control" />
                 <span asp-validation-for="Vin" class="text-danger"></span>
             </div>
+
+            <hr />
+            <span asp-validation-for="Model" class="text-danger"></span>
             <div class="form-group">
-                <label asp-for="ModelId" class="control-label"></label>
-                <select asp-for="ModelId" class ="form-control" asp-items="ViewBag.ModelId"></select>
+                <label asp-for="Model.Year" class="control-label"></label>
+                <input asp-for="Model.Year" class="form-control" min="1990" max="@DateTime.Now.Year" />
+                <span asp-validation-for="Model.Year" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Model.Manufacturer" class="control-label"></label>
+				<select asp-for="Model.ManufacturerId" asp-items="ViewBag.Manufacturers" class="form-control">
+                    <option disabled selected></option>
+                </select>
+                <span asp-validation-for="Model.ManufacturerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.Name" class="control-label"></label>
+                <select asp-for="Model.Name" asp-items="ViewBag.CarModelNames" class="form-control">
+                    <option disabled selected></option>
+                </select>
+                <span asp-validation-for="Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model.Finition" class="control-label"></label>
+                <select asp-for="Model.Finition.Name" asp-items="ViewBag.CarModelFinitions" class="form-control">
+                    <option selected></option>
+                </select>
+                <span asp-validation-for="Model.Finition.Name" class="text-danger"></span>
+            </div>
+            <span asp-validation-for="Model" class="text-danger" ></span>
+            <hr />
             <div class="form-group">
                 <label asp-for="PurchasePrice" class="control-label"></label>
                 <input asp-for="PurchasePrice" class="form-control" />

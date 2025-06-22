@@ -4,6 +4,7 @@ using ExpressVoituresWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoituresWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250512145454_FinitionEntity")]
+    partial class FinitionEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -66,8 +69,8 @@ namespace ExpressVoituresWebApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Finition")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("FinitionName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ManufacturerId")
                         .HasColumnType("int");
@@ -80,6 +83,8 @@ namespace ExpressVoituresWebApp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FinitionName");
 
                     b.HasIndex("ManufacturerId");
 
@@ -119,6 +124,16 @@ namespace ExpressVoituresWebApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers");
+                });
+
+            modelBuilder.Entity("ExpressVoituresWebApp.Data.ModelFinition", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("ModelFinitions");
                 });
 
             modelBuilder.Entity("ExpressVoituresWebApp.Data.Repair", b =>
@@ -353,11 +368,17 @@ namespace ExpressVoituresWebApp.Data.Migrations
 
             modelBuilder.Entity("ExpressVoituresWebApp.Data.CarModel", b =>
                 {
+                    b.HasOne("ExpressVoituresWebApp.Data.ModelFinition", "Finition")
+                        .WithMany()
+                        .HasForeignKey("FinitionName");
+
                     b.HasOne("ExpressVoituresWebApp.Data.Manufacturer", "Manufacturer")
                         .WithMany("Models")
                         .HasForeignKey("ManufacturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Finition");
 
                     b.Navigation("Manufacturer");
                 });

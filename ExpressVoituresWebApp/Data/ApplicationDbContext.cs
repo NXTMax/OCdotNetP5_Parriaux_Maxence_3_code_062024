@@ -11,6 +11,7 @@ namespace ExpressVoituresWebApp.Data
         }
 
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<ModelFinition> ModelFinitions { get; set; }
         public DbSet<CarModel> CarModels { get; set; }
 
         public DbSet<Car> Cars { get; set; }
