@@ -52,12 +52,7 @@ namespace ExpressVoituresWebApp.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["ModelId"] = new SelectList(
-                _context.CarModels
-                .Include(cm => cm.Manufacturer)
-                .Include(cm => cm.Finition),
-                "Id",
-                null);
+            PopulateSelectLists();
             return View();
         }
 
@@ -66,9 +61,14 @@ namespace ExpressVoituresWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
+        public async Task<IActionResult> Create([Bind("Vin,Model,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
             IFormFile? ImageFile)
         {
+            car.Model = GetContextCarModelInstance(car.Model);
+            if (car.Model == null)
+            {
+                ModelState.AddModelError("Model", "Ce modèle n'existe pas");
+            }
             if (ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
@@ -87,13 +87,7 @@ namespace ExpressVoituresWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return View("CreateSuccess");
             }
-            ViewData["ModelId"] = new SelectList(
-                _context.CarModels
-                .Include(cm => cm.Manufacturer)
-                .Include(cm => cm.Finition),
-                "Id",
-                null,
-                car.ModelId);
+            PopulateSelectLists();
             return View(car);
         }
 
@@ -105,18 +99,15 @@ namespace ExpressVoituresWebApp.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _context.Cars
+                .Include(c => c.Model.Finition)
+                .FirstOrDefaultAsync(c => c.Vin == id);
+
             if (car == null)
             {
                 return NotFound();
             }
-            ViewData["ModelId"] = new SelectList(
-                _context.CarModels
-                .Include(cm => cm.Manufacturer)
-                .Include(cm => cm.Finition),
-                "Id",
-                null,
-                car.ModelId);
+            PopulateSelectLists();
             return View(car);
         }
 
@@ -125,7 +116,7 @@ namespace ExpressVoituresWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Vin,ModelId,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
+        public async Task<IActionResult> Edit(long id, [Bind("Vin,Model,PurchasePrice,PurchaseDate,ListingDate,ResellPrice,ResellDate,Description,ImageUrl")] Car car,
             IFormFile? ImageFile)
         {
             if (id != car.Vin)
@@ -133,6 +124,11 @@ namespace ExpressVoituresWebApp.Controllers
                 return NotFound();
             }
 
+            car.Model = GetContextCarModelInstance(car.Model);
+            if (car.Model == null)
+            {
+                ModelState.AddModelError("Model", "Ce modèle n'existe pas");
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -165,13 +161,7 @@ namespace ExpressVoituresWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ModelId"] = new SelectList(
-                _context.CarModels
-                .Include(cm => cm.Manufacturer)
-                .Include(cm => cm.Finition),
-                "Id",
-                null,
-                car.ModelId);
+            PopulateSelectLists();
             return View(car);
         }
 
@@ -216,6 +206,30 @@ namespace ExpressVoituresWebApp.Controllers
         private bool CarExists(long id)
         {
             return _context.Cars.Any(e => e.Vin == id);
+        }
+
+        private CarModel? GetContextCarModelInstance(CarModel model)
+        {
+            return _context.CarModels
+                .Include(cm => cm.Manufacturer)
+                .FirstOrDefault(cm => cm.ManufacturerId == model.ManufacturerId
+                          && cm.Name == model.Name
+                          && cm.Finition == model.Finition
+                          && cm.Year == model.Year);
+        }
+
+        private void PopulateSelectLists()
+        {
+            ViewData["Manufacturers"] = new SelectList(
+                _context.Manufacturers.Where(m => m.Models.Any()),
+                "Id", "Name");
+
+            ViewData["CarModelNames"] = new SelectList(_context.CarModels
+                .Select(cm => new {cm.Name})
+                .Distinct(),
+                "Name", "Name");
+
+            ViewData["CarModelFinitions"] = new SelectList(_context.ModelFinitions);
         }
     }
 }
